@@ -398,10 +398,12 @@ components:
           type: array
         careerTrack:
           type: string
-        # recruiters:
-        #   $ref: '#/components/schemas/TeamMemberDtoArray'
-        # hiringManagers:
-        #   $ref: '#/components/schemas/TeamMemberDtoArray'
+        recruiters:
+           $ref: '#/components/schemas/TeamMemberDtoArray'
+        hiringManagers:
+           $ref: '#/components/schemas/TeamMemberDtoArray'
+        organization:
+           $ref: '#/components/schemas/OrganizationDtoArray'
         source:
           type: string
       required:
@@ -471,24 +473,21 @@ components:
           currency: GBP
           period: WEEK
         careerTrack: MANAGEMENT
-        # recruiters:
-        #   - externalId: string
-        #     fullName: John Doe
-        #     email: jdoe@mail.com
-        #     visible: true
-        #   - externalId: string
-        #     fullName: Sarah Connor
-        #     email: sarah@mail.com
-        #     visible: false
-        # hiringManagers:
-        #   - externalId: string
-        #     fullName: Jane Doe
-        #     email: jane@mail.com
-        #     visible: true
-        #   - externalId: string
-        #     fullName: Kyle Reese
-        #     email: kyle@mail.com
-        #     visible: false
+        recruiters:
+          - externalId: string
+            visible: true
+          - externalId: string
+            visible: false
+        hiringManagers:
+          - externalId: string
+            visible: true
+          - externalId: string
+            visible: false
+        organization:
+          - organizationTypeId: string
+            externalId: string
+          - organizationTypeId: string
+            externalId: string
         source: string
     LocationDto:
       properties:
@@ -564,4 +563,18 @@ components:
           type: string
           enum: [DAY, WEEK, MONTH, YEAR]
           example: WEEK
+      type: object
+      TeamMemberDto:
+        properties:
+          externalId:
+            type: string
+          visible:
+            type: boolean
+      type: object
+      OrganizationDto:
+        properties:
+          organizationTypeId:
+            type: string
+          externalId:
+            type: string
       type: object
