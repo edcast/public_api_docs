@@ -332,6 +332,14 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/JobDto'
+    TeamMemberDtoArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/TeamMemberDto'
+    OrganizationDtoArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationDto'
     JobDto:
       properties:
         id:
@@ -564,17 +572,17 @@ components:
           enum: [DAY, WEEK, MONTH, YEAR]
           example: WEEK
       type: object
-      TeamMemberDto:
-        properties:
-          externalId:
-            type: string
-          visible:
-            type: boolean
+    TeamMemberDto:
+      properties:
+        externalId:
+          type: string
+        visible:
+          type: boolean
       type: object
-      OrganizationDto:
-        properties:
-          organizationTypeId:
-            type: string
-          externalId:
-            type: string
+    OrganizationDto:
+      properties:
+        organizationTypeId:
+          type: string
+        externalId:
+          type: string
       type: object
