@@ -1,0 +1,376 @@
+openapi: 3.0.0
+info:
+  title: Developer V6 API - Opportunities
+  version: 1.0.0
+servers:
+  - url: https://dpdhlstg.edcastpreview.com
+  - url: https://dpdhlsandbox.edcast.com
+paths:
+  /api/developer/v6/opportunities/recommended:
+    get:
+      tags:
+        - default
+      summary: Fetch recommended job or role based on userId or userExternalId
+      parameters:
+        - name: X-API-KEY
+          in: header
+          schema:
+            type: string
+          description: Use API key from Developer API credentials
+          example: '{{dev6_api_key}}'
+        - name: X-ACCESS-TOKEN
+          in: header
+          schema:
+            type: string
+          description: JWT Access Token generated from Auth request
+          example: '{{dev6_access_token}}'
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: external_user_id
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: opportunity_type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: iso_language
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            maximum: 100
+            minimum: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobDtoArrayResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              examples:
+                GetJobsResponseError:
+                  $ref: '#/components/examples/GetJobsResponseError'
+   
+components:
+  examples:
+    GetJobsResponseError:
+      value:
+        - timestamp: "2022-10-27T14:21:02.755+00:00"
+          status: 400
+          error: "Bad Request"
+          message:  "Page index must not be less than zero"
+  schemas:
+    JobDescriptionDto:
+      properties:
+        title:
+          maxLength: 250
+          minLength: 0
+          type: string
+        description:
+          type: string
+        jobDetailsURL:
+          type: string
+        applyURL:
+          type: string
+        referralURL:
+          type: string
+        languageCode:
+          example: en-US
+          type: string
+          description: ISO 639-1 standard
+        default:
+          type: boolean
+      required:
+        - default
+        - languageCode
+        - title
+        - description
+      anyOf:
+        - properties:
+            jobDetailsURL:
+              type: string
+          required: [jobDetailsURL]
+          additionalProperties: false
+        - properties:
+            applyURL:
+              type: string
+          required: [applyURL]
+          additionalProperties: false
+      type: object
+    JobDtoArrayResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/JobDto'
+    TeamMemberDtoArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/TeamMemberDto'
+    OrganizationDtoArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrganizationDto'
+    JobDto:
+      properties:
+        id:
+          maxLength: 250
+          minLength: 0
+          type: string
+        referenceNumber:
+          type: string
+        jobDescriptions:
+          description: Only one job description should have the default set to true
+          items:
+            $ref: '#/components/schemas/JobDescriptionDto'
+          type: array
+        status:
+          example: OPEN
+          type: string
+          enum: [OPEN, CLOSED]
+        company:
+          maxLength: 250
+          minLength: 0
+          type: string
+        startDateTime:
+          description: endDateTime cannot be earlier than startDateTime
+          example: "2022-01-01T00:00:00.00Z"
+          type: string
+        endDateTime:
+          description: endDateTime cannot be earlier than startDateTime
+          example: "2022-12-09T10:15:30.00Z"
+          type: string
+        location:
+          description: Only one location should have the primary field set to true
+          items:
+            $ref: '#/components/schemas/LocationDto'
+          type: array
+        remote:
+          type: string
+          enum: [ON_SITE, HYBRID, REMOTE]
+        division:
+          type: string
+        level:
+          type: string
+          example: ASSOCIATE
+        grade:
+          type: string
+        category:
+          items:
+            type: string
+          type: array
+        jobFamily:
+          items:
+            type: string
+          type: array
+        contractType:
+          type: string
+          enum: [PERMANENT, CONTRACT, TEMPORARY]
+        scheduleType:
+          type: string
+          enum: [FULL_TIME, PART_TIME]
+        salary:
+          $ref: '#/components/schemas/SalaryDto'
+        linkedRoles:
+          items:
+            $ref: '#/components/schemas/LinkedRoleDto'
+          type: array
+        careerTrack:
+          type: string
+        recruiters:
+           $ref: '#/components/schemas/TeamMemberDtoArray'
+        hiringManagers:
+           $ref: '#/components/schemas/TeamMemberDtoArray'
+        source:
+          type: string
+      required:
+        - id
+        - jobDescriptions
+        - status
+      type: object
+      example:
+        id: id0001
+        referenceNumber: REF:0001
+        jobDescriptions:
+          - title: Junior Software Developer
+            description: Java programming softare developer - Spring
+            jobDetailsURL: https://fake.job.details.csod.com
+            applyURL: https://fake.apply.csod.com
+            referralURL: https://fake.referral.csod.com
+            languageCode: en-US
+            default: true
+          - title: Junior Software Developer
+            description: Softare developer - Spring or JEE
+            jobDetailsURL: https://fake.job.details.csod.com
+            applyURL: https://fake.apply.csod.com
+            referralURL: https://fake.referral.csod.com
+            languageCode: pl-PL
+            default: false
+        status: OPEN
+        company: Company
+        startDateTime: '2022-01-01T00:00:00.00Z'
+        endDateTime: '2022-12-09T10:15:30.00Z'
+        location:
+          - locationId: Location id
+            name: London office
+            city: London
+            countryCode: GB
+            region: City
+            postCode: 24-400
+            latitude: 51.50122074389548
+            longitude: -0.12450950893568037
+            primary: true
+          - name: London office
+            city: London
+            countryCode: GB
+            region: City
+            postCode: 24-400
+            latitude: 51.50122074389548
+            longitude: -0.12450950893568037
+            primary: false
+        remote: HYBRID
+        division: Global code division
+        level: ASSOCIATE
+        grade: Grade
+        category:
+          - Category 1
+          - Category 2
+        jobFamily:
+          - Global code job family 1
+          - Global code job family 2
+        contractType: PERMANENT
+        scheduleType: FULL_TIME
+        linkedRoles:
+          - internalId: role internal Id
+            externalId: role global code
+            linkedRoleStatus: DETECTED
+        salary:
+          from: 1000
+          to: 1500
+          currency: GBP
+          period: WEEK
+        careerTrack: MANAGEMENT
+        recruiters:
+          - externalId: string
+            visible: true
+          - externalId: string
+            visible: false
+        hiringManagers:
+          - externalId: string
+            visible: true
+          - externalId: string
+            visible: false
+        organization:
+          - organizationTypeId: string
+            externalId: string
+          - organizationTypeId: string
+            externalId: string
+        source: string
+    LocationDto:
+      properties:
+        locationId:
+          maxLength: 250
+          minLength: 0
+          type: string
+        name:
+          maxLength: 250
+          minLength: 0
+          type: string
+        city:
+          maxLength: 250
+          minLength: 0
+          type: string
+        countryCode:
+          example: GB
+          type: string
+          description: ISO 3166-1 alpha-2
+        region:
+          maxLength: 250
+          minLength: 0
+          type: string
+        postCode:
+          maxLength: 250
+          minLength: 0
+          type: string
+        latitude:
+          format: double
+          maximum: 90
+          minimum: -90
+          type: number
+        longitude:
+          format: double
+          maximum: 180
+          minimum: -180
+          type: number
+        primary:
+          type: boolean
+      type: object
+    LinkedRoleDto:
+      properties:
+        internalId:
+          type: string
+      oneOf:
+        - properties:
+            externalId:
+              type: string
+            linkedRoleStatus:
+              type: string
+              enum: [DETECTED, DECLARED, REMOVED]
+          required: [ externalId, linkedRoleStatus ]
+          additionalProperties: false
+        - properties:
+            linkedRoleStatus:
+              type: string
+              enum: [DETECTED, DECLARED, REMOVED]
+          additionalProperties: false
+      type: object
+    SalaryDto:
+      properties:
+        from:
+          description: Salary to cannot be lower than Salary from
+          format: double
+          type: number
+        to:
+          description: Salary to cannot be lower than Salary from
+          format: double
+          type: number
+        currency:
+          type: string
+        period:
+          type: string
+          enum: [DAY, WEEK, MONTH, YEAR]
+          example: WEEK
+      type: object
+    TeamMemberDto:
+      properties:
+        externalId:
+          type: string
+        visible:
+          type: boolean
+      type: object
+    OrganizationDto:
+      properties:
+        organizationTypeId:
+          type: string
+        externalId:
+          type: string
+      type: object
