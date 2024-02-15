@@ -12,7 +12,18 @@ paths:
         - default
       summary: Fetch recommended job or role based on userId or userExternalId
       parameters:
-        
+        - name: X-API-KEY
+          in: header
+          schema:
+            type: string
+          description: Use API key from Developer API credentials
+          example: '{{dev6_api_key}}'
+        - name: X-ACCESS-TOKEN
+          in: header
+          schema:
+            type: string
+          description: JWT Access Token generated from Auth request
+          example: '{{dev6_access_token}}'
         - name: user_id
           in: query
           required: false
