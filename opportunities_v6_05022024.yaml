@@ -10,7 +10,7 @@ paths:
     get:
       tags:
         - default
-      summary: Fetch recommended job or role based on userId or userExternalId
+      summary: Fetch recommended job or role based on user_id
       parameters:
         - name: X-API-KEY
           in: header
@@ -29,11 +29,6 @@ paths:
           required: false
           schema:
             type: string
-        - name: external_user_id
-          in: query
-          required: false
-          schema:
-            type: string
         - name: opportunity_type
           in: query
           required: false
@@ -44,11 +39,12 @@ paths:
           required: false
           schema:
             type: string
-        - name: limit
+        - name: recommendations_count
           in: query
           required: false
           schema:
             type: integer
+            default: 15
             maximum: 100
             minimum: 1
       responses:
@@ -58,8 +54,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserOpportunityMatchResultDtoArrayResponse'
-        '400':
-          description: Bad request
+        '401':
+          description: Unauthorized
           content:
             application/json:
               examples:
@@ -70,14 +66,16 @@ components:
     UserOpportunityMatchResultDtoResponseError:
       value:
         - timestamp: "2022-10-27T14:21:02.755+00:00"
-          status: 400
-          error: "Bad Request"
-          message:  "Page index must not be less than zero"
+          status: 401
+          error: "Unauthorized"
+          message:  "401 UNAUTHORIZED"
   schemas:
     UserOpportunityMatchResultDtoArrayResponse:
       type: array
       items:
-        $ref: '#/components/schemas/UserOpportunityMatchResultDto'
+        anyOf:
+          - $ref: '#/components/schemas/UserOpportunityMatchResultDtoExample1'
+          - $ref: '#/components/schemas/UserOpportunityMatchResultDtoExample2'
     UserOpportunityMatchResultDto:
       properties:
         type:
@@ -113,6 +111,32 @@ components:
         id: id0001
         title: Junior Software Developer
         overallScore: 80
+        overallScoreStatus: EXCELLENT
+        isBookmarked: true
+        isDismissed: false
+        isAspirational: false
+        hasOpenJobs: false
+        bookmarkedCount: 0
+        appliedCount: 0
+    UserOpportunityMatchResultDtoExample1:
+      example:
+        type: role
+        id: id0001
+        title: Junior Software Developer
+        overallScore: 80
+        overallScoreStatus: EXCELLENT
+        isBookmarked: true
+        isDismissed: false
+        isAspirational: false
+        hasOpenJobs: false
+        bookmarkedCount: 0
+        appliedCount: 0
+    UserOpportunityMatchResultDtoExample2:
+      example:
+        type: role
+        id: id0002
+        title: Regular Software Developer
+        overallScore: 70
         overallScoreStatus: EXCELLENT
         isBookmarked: true
         isDismissed: false
