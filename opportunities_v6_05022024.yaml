@@ -61,6 +61,212 @@ paths:
               examples:
                 UserOpportunityMatchResultDtoResponseError:
                   $ref: '#/components/examples/UserOpportunityMatchResultDtoResponseError'
+  /api/developer/v6/opportunities:
+    get:
+      summary: List all job opportunities
+      parameters:
+        - name: user_id
+          in: query
+          description: "User id, Supported format ID-, EMAIL-, EXT-"
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: "Page number. Default: 1"
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: "Number of opportunities. Default: 15"
+          required: false
+          schema:
+            type: integer
+        - name: reference_number
+          in: query
+          description: "Reference number"
+          required: false
+          schema:
+            type: string
+        - name: source
+          in: query
+          description: "source of job opportunity"
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: "Status of job opportunity"
+          required: false
+          schema:
+            type: string
+        - name: start_date_time
+          in: query
+          description: "Start date time of job opportunity"
+          required: false
+          schema:
+            type: string
+        - name: end_date_time
+          in: query
+          description: "Start date time of job opportunity"
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of job opportunities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Opportunity'
+    post:
+      summary: Create opportunity
+      parameters:
+        - name: user_id
+          in: query
+          description: User id, Supported format ID-, EMAIL-, EXT-
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: string
+                  source:
+                    type: string
+                  start_date_time:
+                    type: string
+                  end_date_time:
+                    type: string
+  /api/developer/v6/opportunities/{id}:
+    get:
+      summary: Fetch opportunity based on job_vacancy_id
+      parameters:
+        - name: user_id
+          in: query
+          description: "User id, Supported format ID-, EMAIL-, EXT-"
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: "Id of either job_vacancy or job_role, default: job_vacancy_id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A job opportunity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opportunity'
+    put:
+      summary: Update opportunity based on job_vacancy_id or job_role_id
+      parameters:
+        - name: user_id
+          in: query
+          description: "User id, Supported format ID-, EMAIL-, EXT-"
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: "Id of either job_vacancy or job_role, default: job_vacancy_id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: string
+                  source:
+                    type: string
+                  start_date_time:
+                    type: string
+                  end_date_time:
+                    type: string
+    delete:
+      summary: Delete opportunity based on job_vacancy_id or job_role_id
+      parameters:
+        - name: user_id
+          in: query
+          description: "User id, Supported format ID-, EMAIL-, EXT-"
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: "Id of either job_vacancy or job_role, default: job_vacancy_id"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: string
+                  source:
+                    type: string
+                  start_date_time:
+                    type: string
+                  end_date_time:
+                    type: string
+  /api/developer/v6/opportunities/tm_config:
+    get:
+      summary: Get Talent Marketplace config values
+      parameters:
+        - name: type
+          in: query
+          description: "Type is nodes from tm_config. Valid Types: talent_marketplace, labels, lovs, configurations, opportunities, aspirations, superadmin_config. Default: Passing all tm_config"
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
 components:
   examples:
     UserOpportunityMatchResultDtoResponseError:
@@ -144,3 +350,20 @@ components:
         hasOpenJobs: false
         bookmarkedCount: 0
         appliedCount: 0
+    Opportunity:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        source:
+          type: string
+        start_date_time:
+          type: string
+        end_date_time:
+          type: string
