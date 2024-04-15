@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: Developer V6 API - Users
+  version: 1.0.0
+servers:
+  - url: https://dpdhlstg.edcastpreview.com
+  - url: https://dpdhlsandbox.edcast.com
+paths:
+  /api/developer/v6/users/{{user_id}}/preferences:
+    get:
+      tags:
+        - default
+      summary: Returns users career preferences
+      parameters:
+        - name: CURRENT-USER
+          required: true
+          in: header
+          schema:
+            type: string
+          description: User id, Supported format ID-, EMAIL-, EXT-
+          example: 'EXT-312'
+        - name: X-ACCESS-TOKEN
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT Access Token generated from Auth request
+          example: '{{dev6_access_token}}'
+        - name: user_id
+          required: true
+          schema:
+            type: string
+          in: path
+          description: User id, Supported format ID-, EMAIL-, EXT-
+          example: 'EMAIL-csheshan%40csod%2Ecom'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCareerPreferencesDto'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              example:
+                $ref: '#/components/examples/UserNotFoundDtoResponseDtoResponseError'
+    patch:
+      summary: Partial update users career preferences
+      parameters:
+        - name: CURRENT-USER
+          required: true
+          in: header
+          schema:
+            type: string
+          description: User id, Supported format ID-, EMAIL-, EXT-
+          example: 'EXT-312'
+        - name: X-ACCESS-TOKEN
+          in: header
+          required: true
+          schema:
+            type: string
+          description: JWT Access Token generated from Auth request
+          example: '{{dev6_access_token}}'
+        - name: user_id
+          required: true
+          schema:
+            type: string
+          in: path
+          description: User id, Supported format ID-, EMAIL-, EXT-
+          example: 'csheshan%40csod%2Ecom'
+      requestBody:
+        description: Delta can be used to update only selected fields.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchCareerPreferencesDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              example:
+                message: 'User career preferences updated successfully'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              example:
+                $ref: '#/components/examples/UserNotFoundDtoResponseDtoResponseError'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              example:
+                $ref: '#/components/examples/PreferencesValidationErrorDto'
+
+components:
+  examples:
+    UserNotFoundDtoResponseDtoResponseError:
+        error:
+            message: 'User not found'
+    PreferencesValidationErrorDto:
+        error:
+            message:
+              - 'Invalid job_types. Valid values are case sensitive: 1hhc4m8jn, 1h842pfn1, OTHER, 1gmie4qkm, APPRENTICESHIP, VOLUNTEER, TEMPORARY, CONTRACT, PERMANENT'
+              - 'Invalid work_location_ids. Locations are disabled for career_preference context.'
+              - 'Invalid organization_ids: invOrgId'
+  schemas:
+    GetCareerPreferencesDto:
+          properties:
+            job_types:
+              type: array
+              items:
+                type: string
+            workplace_models:
+              type: array
+              items:
+                type: string
+            levels:
+              type: array
+              items:
+                type: string
+            schedule_types:
+              type: array
+              items:
+                type: string
+            job_role_types:
+              type: array
+              items:
+                type: string
+            career_goals:
+              type: array
+              items:
+                type: string
+            open_to_offers:
+              type: array
+              items:
+                type: string
+            work_location_ids:
+              type: array
+              items:
+                type: string
+            organization_ids:
+              type: array
+              items:
+                type: string
+          required:
+            - job_types
+            - workplace_models
+            - levels
+            - schedule_types
+            - job_role_types
+            - career_goals
+            - open_to_offers
+            - work_location_ids
+            - organization_ids
+          example:
+            job_types: ["CONTRACT"]
+            workplace_models: ["REMOTE", "ON_SITE"]
+            levels: []
+            schedule_types: ["FULL_TIME", "PART_TIME"]
+            job_role_types: ["MANAGEMENT"]
+            career_goals: ["BACKWARD", "HORIZONTAL"]
+            open_to_offers: ["OPEN_TO_VACANCIES"]
+            work_location_ids: ["loc1", "loc2"]
+            organization_ids: ["org1", "org2"]
+    PatchCareerPreferencesDto:
+        properties:
+          job_types:
+            type: array
+            items:
+              type: string
+          workplace_models:
+            type: array
+            items:
+              type: string
+          levels:
+            type: array
+            items:
+              type: string
+          schedule_types:
+            type: array
+            items:
+              type: string
+          job_role_types:
+            type: array
+            items:
+              type: string
+          career_goals:
+            type: array
+            items:
+              type: string
+          open_to_offers:
+            type: array
+            items:
+              type: string
+          work_location_ids:
+            type: array
+            items:
+              type: string
+          organization_ids:
+            type: array
+            items:
+              type: string
+        example:
+          job_types: []
+          work_location_ids: ["loc1", "loc2", "loc3"]
+          levels: ["ASSOCIATE", "DIRECTOR"]
