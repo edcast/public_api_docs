@@ -284,42 +284,6 @@ components:
         anyOf:
           - $ref: '#/components/schemas/UserOpportunityMatchResultDtoExample1'
           - $ref: '#/components/schemas/UserOpportunityMatchResultDtoExample2'
-    UserOpportunityMatchResultDto:
-      properties:
-        opportunity_type:
-          type: string
-          enum: [job_role, job_vacancy]
-        id:
-          maxLength: 250
-          minLength: 0
-          type: string
-        title:
-          type: string
-        overall_score:
-          type: integer
-        overall_score_status:
-          type: string
-        is_bookmarked:
-          type: string
-        is_dismissed:
-          type: string
-        is_aspirational:
-          type: string
-        has_open_jobs:
-          type: string
-      required:
-        - id
-      type: object
-      example:
-        opportunity_type: job_role
-        id: id0001
-        title: Junior Software Developer
-        overall_score: 80
-        overall_score_status: EXCELLENT
-        is_bookmarked: true
-        is_dismissed: false
-        is_aspirational: false
-        has_open_jobs: false
     UserOpportunityMatchResultDtoExample1:
       example:
         opportunity_type: job_role
@@ -331,6 +295,20 @@ components:
         is_dismissed: false
         is_aspirational: false
         has_open_jobs: false
+        locations: 
+          - location_id: 110
+            country_code: Poland
+            city: Warsaw
+          - location_id: 111
+            country_code: Poland
+            city: Cracow  
+        organizations: 
+          - organization_type_id: DIVISION,
+            external_id: external_id_123
+          - organization_type_id: BUSINESS_UNIT,
+            external_id: external_id_124  
+        job_family: 
+          external_id:  job_family_external_id  
     UserOpportunityMatchResultDtoExample2:
       example:
         opportunity_type: job_role
@@ -342,6 +320,20 @@ components:
         is_dismissed: false
         is_aspirational: false
         has_open_jobs: false
+        locations: 
+          - location_id: 110
+            country_code: Poland
+            city: Warsaw
+          - location_id: 111
+            country_code: Poland
+            city: Cracow  
+        organizations: 
+          - organization_type_id: DIVISION,
+            external_id: external_id_123
+          - organization_type_id: BUSINESS_UNIT,
+            external_id: external_id_124  
+        job_family: 
+          external_id:  job_family_external_id
     Opportunity:
       type: object
       properties:

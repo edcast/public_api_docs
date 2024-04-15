@@ -382,16 +382,6 @@ components:
         level:
           type: string
           example: ASSOCIATE
-        grade:
-          type: string
-        category:
-          items:
-            type: string
-          type: array
-        jobFamily:
-          items:
-            type: string
-          type: array
         contractType:
           type: string
           enum: [PERMANENT, CONTRACT, TEMPORARY]
@@ -462,13 +452,6 @@ components:
         remote: HYBRID
         division: Global code division
         level: ASSOCIATE
-        grade: Grade
-        category:
-          - Category 1
-          - Category 2
-        jobFamily:
-          - Global code job family 1
-          - Global code job family 2
         contractType: PERMANENT
         scheduleType: FULL_TIME
         linkedRoles:
